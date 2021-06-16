@@ -39,7 +39,6 @@ import {
     getFactionFieldWorkRepGain,
 } from "./PersonObjects/formulas/reputation";
 import { FconfSettings } from "./Fconf/FconfSettings";
-import { unmount as unmountGang } from "./Gang";
 import {
     hasHacknetServers,
     renderHacknetNodesUI,
@@ -533,7 +532,6 @@ const Engine = {
         Engine.Display.missionContent.style.display = "none";
         if (document.getElementById("gang-container")) {
             document.getElementById("gang-container").style.display = "none";
-            unmountGang();
         }
 
         if (Player.inGang()) {
