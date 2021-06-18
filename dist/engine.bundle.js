@@ -635,6 +635,15 @@ function setElementStyle(el, params) {
     if (params.width !== undefined) {
         el.style.width = params.width;
     }
+    if (params.height !== undefined) {
+        el.style.height = params.height;
+    }
+    if (params.top !== undefined) {
+        el.style.top = params.top;
+    }
+    if (params.left !== undefined) {
+        el.style.left = params.left;
+    }
     if (params.backgroundColor !== undefined) {
         el.style.backgroundColor = params.backgroundColor;
     }
@@ -29412,6 +29421,7 @@ function NetscriptFunctions(workerScript) {
                 updateDynamicRam("ascendMember", Object(_Netscript_RamCostGenerator__WEBPACK_IMPORTED_MODULE_2__["getRamCost"])("gang", "ascendMember"));
                 checkGangApiAccess("ascendMember");
                 const member = getGangMember("ascendMember", name);
+                if(!member.canAscend()) return;
                 return _Player__WEBPACK_IMPORTED_MODULE_38__["Player"].gang.ascendMember(member, workerScript);
             },
             setTerritoryWarfare: function(engage) {
@@ -30883,10 +30893,14 @@ document.addEventListener("DOMContentLoaded", getGameContainer);
 function createPopup(id, rootComponent, props) {
     let container = document.getElementById(id);
     if (container == null) {
+        function onClick(event) {
+            //console.log(this.id);
+        }
         container = createElement_1.createElement("div", {
             class: "popup-box-container",
             display: "flex",
             id: id,
+            clickListener: onClick,
         });
         gameContainer.appendChild(container);
     }
@@ -30899,11 +30913,11 @@ exports.createPopup = createPopup;
  */
 function removePopup(id) {
     const content = document.getElementById(`${id}`);
-    if (content == null) {
+    if (content == null)
         return;
-    }
     ReactDOM.unmountComponentAtNode(content);
     removeElementById_1.removeElementById(id);
+    removeElementById_1.removeElementById(`${id}-close`);
 }
 exports.removePopup = removePopup;
 
@@ -49810,7 +49824,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GangConstants = void 0;
 exports.GangConstants = {
     // Respect is divided by this to get rep gain
-    GangRespectToReputationRatio: 5,
+    GangRespectToReputationRatio: 25,
     MaximumGangMembers: 30,
     CyclesPerTerritoryAndPowerUpdate: 100,
     // Portion of upgrade multiplier that is kept after ascending
@@ -73441,12 +73455,13 @@ class GangMember {
     }
     ascend() {
         const res = this.getAscensionResults();
-        this.hack_asc_points += this.hack_exp;
-        this.str_asc_points += this.str_exp;
-        this.def_asc_points += this.def_exp;
-        this.dex_asc_points += this.dex_exp;
-        this.agi_asc_points += this.agi_exp;
-        this.cha_asc_points += this.cha_exp;
+        const points = this.getGainedAscensionPoints();
+        this.hack_asc_points += points.hack;
+        this.str_asc_points += points.str;
+        this.def_asc_points += points.def;
+        this.dex_asc_points += points.dex;
+        this.agi_asc_points += points.agi;
+        this.cha_asc_points += points.cha;
         // Remove upgrades. Then re-calculate multipliers and stats
         this.upgrades.length = 0;
         this.hack_mult = 1;
