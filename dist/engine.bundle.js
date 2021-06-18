@@ -30894,12 +30894,20 @@ function createPopup(id, rootComponent, props) {
     let container = document.getElementById(id);
     if (container == null) {
         function onClick(event) {
-            //console.log(this.id);
+            if (!event.srcElement)
+                return;
+            if (!(event.srcElement instanceof HTMLElement))
+                return;
+            const clickedId = event.srcElement.id;
+            if (clickedId !== id)
+                return;
+            removePopup(id);
         }
         container = createElement_1.createElement("div", {
             class: "popup-box-container",
             display: "flex",
             id: id,
+            backgroundColor: 'rgba(0,0,0,0.5)',
             clickListener: onClick,
         });
         gameContainer.appendChild(container);
