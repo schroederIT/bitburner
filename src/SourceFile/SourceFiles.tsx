@@ -147,11 +147,16 @@ SourceFiles["SourceFile9"] = new SourceFile(
       <br />
       Level 2: You start with 128GB of RAM on your home computer when entering a new BitNode
       <br />
-      Level 3: Grants a highly-upgraded Hacknet Server when entering a new BitNode
+      Level 3: Grants a highly-upgraded Hacknet Server when entering a new BitNode (NOT when installing augmentations)
       <br />
       <br />
-      (Note that the Level 3 effect of this Source-File only applies when entering a new BitNode, NOT when installing
-      Augmentations)
+      This Source-File also increases your Hacknet-related multipliers by:
+      <br />
+      Level 1: 8%
+      <br />
+      Level 2: 12%
+      <br />
+      Level 3: 14%
     </>
   ),
 );
